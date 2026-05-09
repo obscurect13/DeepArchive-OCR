@@ -1,6 +1,4 @@
-import pytest
 import numpy as np
-import cv2
 
 
 def test_crop_regions_basic():

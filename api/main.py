@@ -15,17 +15,14 @@ from src.pipeline import process_image
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
 logger = logging.getLogger("deeparchive.api")
 
 # =========================
 # APP
 # =========================
-app = FastAPI(
-    title="OCR YOLO API",
-    version="2.0"
-)
+app = FastAPI(title="OCR YOLO API", version="2.0")
 
 
 # =========================
@@ -37,7 +34,9 @@ async def log_requests(request: Request, call_next):
     logger.info(f"→ {request.method} {request.url.path}")
     response = await call_next(request)
     duration = round((time.time() - start) * 1000, 2)
-    logger.info(f"← {request.method} {request.url.path} [{response.status_code}] {duration}ms")
+    logger.info(
+        f"← {request.method} {request.url.path} [{response.status_code}] {duration}ms"
+    )
     return response
 
 
@@ -91,11 +90,13 @@ async def extract(file: UploadFile = File(...)):
         box = region["box"]
         boxes.append(box)
         for text_item in region["texts"]:
-            texts.append({
-                "text": text_item["text"],
-                "confidence": text_item.get("confidence", 0.0),
-                "box": box
-            })
+            texts.append(
+                {
+                    "text": text_item["text"],
+                    "confidence": text_item.get("confidence", 0.0),
+                    "box": box,
+                }
+            )
 
     logger.info(
         f"Pipeline complete: {result['num_boxes']} boxes, "
@@ -113,5 +114,5 @@ async def extract(file: UploadFile = File(...)):
         "text_regions": result["text_regions"],
         "annotated_image": result["annotated_image"],
         "image_width": result["image_width"],
-        "image_height": result["image_height"]
+        "image_height": result["image_height"],
     }

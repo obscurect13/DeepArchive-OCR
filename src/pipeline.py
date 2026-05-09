@@ -1,5 +1,4 @@
 import cv2
-import numpy as np
 import base64
 
 from src.detector import detect_text_regions
@@ -21,20 +20,22 @@ def preprocess_for_ocr(crop):
     # 3. Redimensionnement si le crop est trop petit (optionnel mais recommandé)
     height, width = binary.shape
     if height < 30:
-        binary = cv2.resize(binary, (None, None), fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
+        binary = cv2.resize(
+            binary, (None, None), fx=2, fy=2, interpolation=cv2.INTER_CUBIC
+        )
 
     return binary
 
 
 def draw_boxes(image, boxes):
-    for (x1, y1, x2, y2) in boxes:
+    for x1, y1, x2, y2 in boxes:
         cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
     return image
 
 
 def encode_image_to_base64(image):
-    _, buffer = cv2.imencode('.jpg', image)
-    img_base64 = base64.b64encode(buffer).decode('utf-8')
+    _, buffer = cv2.imencode(".jpg", image)
+    img_base64 = base64.b64encode(buffer).decode("utf-8")
     return img_base64
 
 
@@ -54,10 +55,7 @@ def process_image(image):
         # Extraction du texte sur l'image nettoyée
         extracted_texts = ocr.extract_text(processed_crop)
         box = boxes[i]
-        text_regions.append({
-            "box": box,
-            "texts": extracted_texts
-        })
+        text_regions.append({"box": box, "texts": extracted_texts})
 
     # 3. Annotation de l'image originale
     annotated = draw_boxes(image.copy(), boxes)
@@ -70,5 +68,5 @@ def process_image(image):
         "text_regions": text_regions,
         "annotated_image": annotated_base64,
         "image_width": image.shape[1],
-        "image_height": image.shape[0]
+        "image_height": image.shape[0],
     }

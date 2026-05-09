@@ -1,4 +1,3 @@
-import pytest
 import numpy as np
 from unittest.mock import Mock, patch
 
@@ -7,18 +6,18 @@ def test_ocr_engine_init():
     """Test OCREngine initialization."""
     from src.ocr_engine import OCREngine
 
-    with patch('src.ocr_engine.easyocr.Reader'):
-        engine = OCREngine(languages=['en', 'fr'], gpu=False)
-        assert engine.languages == ['en', 'fr']
+    with patch("src.ocr_engine.easyocr.Reader"):
+        engine = OCREngine(languages=["en", "fr"], gpu=False)
+        assert engine.languages == ["en", "fr"]
 
 
 def test_ocr_engine_default_languages():
     """Test OCREngine with default languages."""
     from src.ocr_engine import OCREngine
 
-    with patch('src.ocr_engine.easyocr.Reader'):
+    with patch("src.ocr_engine.easyocr.Reader"):
         engine = OCREngine()
-        assert engine.languages == ['en', 'fr']
+        assert engine.languages == ["en", "fr"]
 
 
 def test_extract_text_success():
@@ -28,10 +27,10 @@ def test_extract_text_success():
     mock_reader = Mock()
     mock_reader.readtext.return_value = [
         ([0, 0, 10, 10], "Hello", 0.95),
-        ([0, 10, 20, 20], "World", 0.88)
+        ([0, 10, 20, 20], "World", 0.88),
     ]
 
-    with patch('src.ocr_engine.easyocr.Reader', return_value=mock_reader):
+    with patch("src.ocr_engine.easyocr.Reader", return_value=mock_reader):
         engine = OCREngine()
         image = np.zeros((100, 100), dtype=np.uint8)
         results = engine.extract_text(image)
@@ -50,7 +49,7 @@ def test_extract_text_empty():
     mock_reader = Mock()
     mock_reader.readtext.return_value = []
 
-    with patch('src.ocr_engine.easyocr.Reader', return_value=mock_reader):
+    with patch("src.ocr_engine.easyocr.Reader", return_value=mock_reader):
         engine = OCREngine()
         image = np.zeros((100, 100), dtype=np.uint8)
         results = engine.extract_text(image)
@@ -65,10 +64,10 @@ def test_extract_text_whitespace_filtering():
     mock_reader = Mock()
     mock_reader.readtext.return_value = [
         ([0, 0, 10, 10], "   ", 0.95),  # Whitespace only
-        ([0, 10, 20, 20], "Valid", 0.88)
+        ([0, 10, 20, 20], "Valid", 0.88),
     ]
 
-    with patch('src.ocr_engine.easyocr.Reader', return_value=mock_reader):
+    with patch("src.ocr_engine.easyocr.Reader", return_value=mock_reader):
         engine = OCREngine()
         image = np.zeros((100, 100), dtype=np.uint8)
         results = engine.extract_text(image)
@@ -82,11 +81,9 @@ def test_extract_text_confidence_rounding():
     from src.ocr_engine import OCREngine
 
     mock_reader = Mock()
-    mock_reader.readtext.return_value = [
-        ([0, 0, 10, 10], "Test", 0.987654321)
-    ]
+    mock_reader.readtext.return_value = [([0, 0, 10, 10], "Test", 0.987654321)]
 
-    with patch('src.ocr_engine.easyocr.Reader', return_value=mock_reader):
+    with patch("src.ocr_engine.easyocr.Reader", return_value=mock_reader):
         engine = OCREngine()
         image = np.zeros((100, 100), dtype=np.uint8)
         results = engine.extract_text(image)

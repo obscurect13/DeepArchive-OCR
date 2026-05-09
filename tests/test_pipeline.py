@@ -1,7 +1,5 @@
-import pytest
 import numpy as np
-import cv2
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 
 def test_preprocess_for_ocr():
@@ -61,6 +59,7 @@ def test_encode_image_to_base64():
     assert len(encoded) > 0
     # Should be valid base64
     import base64
+
     decoded = base64.b64decode(encoded)
     assert len(decoded) > 0
 
@@ -73,9 +72,15 @@ def test_process_image_integration():
     image = np.zeros((100, 100, 3), dtype=np.uint8)
     image[:] = [255, 255, 255]
 
-    with patch('src.pipeline.detect_text_regions', return_value=[(10, 10, 30, 30)]):
-        with patch('src.pipeline.crop_regions', return_value=[np.zeros((20, 20, 3), dtype=np.uint8)]):
-            with patch('src.pipeline.ocr.extract_text', return_value=[{"text": "Test", "confidence": 0.95}]):
+    with patch("src.pipeline.detect_text_regions", return_value=[(10, 10, 30, 30)]):
+        with patch(
+            "src.pipeline.crop_regions",
+            return_value=[np.zeros((20, 20, 3), dtype=np.uint8)],
+        ):
+            with patch(
+                "src.pipeline.ocr.extract_text",
+                return_value=[{"text": "Test", "confidence": 0.95}],
+            ):
                 result = process_image(image)
 
                 assert result["num_boxes"] == 1
@@ -93,8 +98,8 @@ def test_process_image_empty_result():
 
     image = np.zeros((100, 100, 3), dtype=np.uint8)
 
-    with patch('src.pipeline.detect_text_regions', return_value=[]):
-        with patch('src.pipeline.crop_regions', return_value=[]):
+    with patch("src.pipeline.detect_text_regions", return_value=[]):
+        with patch("src.pipeline.crop_regions", return_value=[]):
             result = process_image(image)
 
             assert result["num_boxes"] == 0
@@ -109,12 +114,18 @@ def test_process_image_multiple_boxes():
     image = np.zeros((100, 100, 3), dtype=np.uint8)
     boxes = [(10, 10, 30, 30), (50, 50, 70, 70)]
 
-    with patch('src.pipeline.detect_text_regions', return_value=boxes):
-        with patch('src.pipeline.crop_regions', return_value=[
-            np.zeros((20, 20, 3), dtype=np.uint8),
-            np.zeros((20, 20, 3), dtype=np.uint8)
-        ]):
-            with patch('src.pipeline.ocr.extract_text', return_value=[{"text": "Text", "confidence": 0.9}]):
+    with patch("src.pipeline.detect_text_regions", return_value=boxes):
+        with patch(
+            "src.pipeline.crop_regions",
+            return_value=[
+                np.zeros((20, 20, 3), dtype=np.uint8),
+                np.zeros((20, 20, 3), dtype=np.uint8),
+            ],
+        ):
+            with patch(
+                "src.pipeline.ocr.extract_text",
+                return_value=[{"text": "Text", "confidence": 0.9}],
+            ):
                 result = process_image(image)
 
                 assert result["num_boxes"] == 2

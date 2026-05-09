@@ -3,6 +3,7 @@ utils/document_generator.py
 Generates PDF and DOCX files from OCR extraction results.
 Texts are placed spatially according to their bounding box positions.
 """
+
 import io
 import base64
 
@@ -14,11 +15,12 @@ from reportlab.lib.pagesizes import A4
 # IMAGE-BASED RECONSTRUCTION (pixel-perfect)
 # ============================================================
 
+
 def generate_pdf_from_image(
     annotated_image_b64: str,
     texts: list[dict] = None,
     image_width: int = None,
-    image_height: int = None
+    image_height: int = None,
 ) -> bytes:
     """
     Generate a searchable PDF:
@@ -65,7 +67,7 @@ def generate_pdf_from_image(
 
             # Scale box to PDF canvas size
             pdf_x = x1 * scale_x
-            pdf_y = img_h - (y2 * scale_y)   # flip Y axis (PDF origin = bottom-left)
+            pdf_y = img_h - (y2 * scale_y)  # flip Y axis (PDF origin = bottom-left)
 
             box_w = (x2 - x1) * scale_x
             box_h = (y2 - y1) * scale_y
@@ -89,9 +91,11 @@ def generate_pdf_from_image(
     c.save()
     return pdf_buffer.getvalue()
 
+
 # ============================================================
 # HELPERS
 # ============================================================
+
 
 def _estimate_font_size(box: list, min_size: int = 7, max_size: int = 32) -> int:
     """Estimate font size from bounding box height."""
@@ -109,10 +113,9 @@ def _sort_texts_top_to_bottom(texts: list[dict]) -> list[dict]:
 # PDF GENERATION
 # ============================================================
 
+
 def generate_pdf_with_layout(
-    texts: list[dict],
-    image_width: int,
-    image_height: int
+    texts: list[dict], image_width: int, image_height: int
 ) -> bytes:
     """
     Generate a clean PDF with text placed proportionally

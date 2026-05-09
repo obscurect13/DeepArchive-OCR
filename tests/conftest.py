@@ -21,5 +21,5 @@ def sample_text_regions():
     """Create sample text regions."""
     return [
         {"text": "Hello", "confidence": 0.95},
-        {"text": "World", "confidence": 0.88}
+        {"text": "World", "confidence": 0.88},
     ]
