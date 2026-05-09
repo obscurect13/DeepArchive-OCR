@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+python-multipart
+opencv-python-headless
+numpy
+pillow
+streamlit
+requests
+pandas
+easyocr
+reportlab
+pytest
+pytest-cov
+pytest-mock
