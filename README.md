@@ -63,7 +63,7 @@ deepArchive-OCR/
 ## Getting Started
 
 ```bash
-git clone https://github.com/your-username/deepArchive-OCR.git
+git clone https://github.com/obscurect13/DeepArchive-OCR.git
 cd deepArchive-OCR
 docker compose up --build
 ```
