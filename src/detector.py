@@ -2,7 +2,7 @@ import easyocr
 import numpy as np
 
 # Initialize once at module level to avoid reloading the model on every call
-_reader = easyocr.Reader(['en', 'fr'], gpu=False)
+_reader = easyocr.Reader(["en", "fr"], gpu=False)
 
 
 def detect_text_regions(image: np.ndarray) -> list[tuple[int, int, int, int]]:

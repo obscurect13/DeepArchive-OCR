@@ -9,7 +9,7 @@ class OCREngine:
     """
 
     def __init__(self, languages: list[str] = None, gpu: bool = False):
-        self.languages = languages or ['en', 'fr']
+        self.languages = languages or ["en", "fr"]
         self.reader = easyocr.Reader(self.languages, gpu=gpu)
 
     def extract_text(self, image: np.ndarray) -> list[dict]:
@@ -25,12 +25,9 @@ class OCREngine:
         results = self.reader.readtext(image, detail=1)
 
         extracted = []
-        for (_, text, confidence) in results:
+        for _, text, confidence in results:
             text = text.strip()
             if text:
-                extracted.append({
-                    "text": text,
-                    "confidence": round(float(confidence), 4)
-                })
+                extracted.append({"text": text, "confidence": round(float(confidence), 4)})
 
         return extracted

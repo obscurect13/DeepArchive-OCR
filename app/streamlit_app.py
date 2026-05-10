@@ -1,11 +1,12 @@
-import os
 import base64
 import logging
+import os
+
 import pandas as pd
 import requests
 import streamlit as st
 
-from utils.db import init_db, insert_document, get_all_documents
+from utils.db import get_all_documents, init_db, insert_document
 from utils.document_generator import generate_pdf_from_image
 
 # =========================
@@ -14,7 +15,7 @@ from utils.document_generator import generate_pdf_from_image
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
 logger = logging.getLogger("deeparchive.frontend")
 
@@ -32,11 +33,8 @@ init_db()
 # =========================
 # PAGE CONFIG
 # =========================
-st.set_page_config(
-    page_title="DeepArchive OCR",
-    page_icon="📄",
-    layout="wide"
-)
+st.set_page_config(page_title="DeepArchive OCR", page_icon="📄", layout="wide")
+
 
 # =========================
 # UTILS
@@ -96,7 +94,6 @@ page = st.session_state.page
 # 📤 UPLOAD PAGE
 # ============================================================
 if page == "upload":
-
     st.title("📤 Upload Document")
 
     if not api_online:
@@ -106,7 +103,6 @@ if page == "upload":
     uploaded_file = st.file_uploader("Upload image", type=["png", "jpg", "jpeg"])
 
     if uploaded_file:
-
         logger.info(f"User uploaded file: {uploaded_file.name}")
         st.image(uploaded_file, width="stretch")
 
@@ -145,13 +141,13 @@ if page == "upload":
                 result["annotated_image"],
                 texts=result["texts"],
                 image_width=result.get("image_width"),
-                image_height=result.get("image_height")
+                image_height=result.get("image_height"),
             )
             st.download_button(
                 label="📄 Download as PDF",
                 data=pdf_bytes,
                 file_name=f"{uploaded_file.name}_extracted.pdf",
-                mime="application/pdf"
+                mime="application/pdf",
             )
         except Exception as e:
             logger.error(f"PDF generation error: {e}", exc_info=True)
@@ -184,7 +180,6 @@ if page == "upload":
 # 📚 HISTORY PAGE
 # ============================================================
 elif page == "history":
-
     st.title("📚 Processing History")
 
     history = get_all_documents()
@@ -198,18 +193,23 @@ elif page == "history":
         filtered_history = []
         for item in history:
             content_text = " ".join([t["text"] for t in item["texts"]]).lower()
-            if (search_query.lower() in item["file_name"].lower()
-                    or search_query.lower() in content_text):
+            if (
+                search_query.lower() in item["file_name"].lower()
+                or search_query.lower() in content_text
+            ):
                 filtered_history.append(item)
 
         if filtered_history:
-            df_export = pd.DataFrame([
-                {
-                    "Date": i["created_at"],
-                    "Filename": i["file_name"],
-                    "Full Text": " | ".join([t["text"] for t in i["texts"]])
-                } for i in filtered_history
-            ])
+            df_export = pd.DataFrame(
+                [
+                    {
+                        "Date": i["created_at"],
+                        "Filename": i["file_name"],
+                        "Full Text": " | ".join([t["text"] for t in i["texts"]]),
+                    }
+                    for i in filtered_history
+                ]
+            )
             st.download_button(
                 label="📥 Export results to CSV",
                 data=df_export.to_csv(index=False).encode("utf-8"),
@@ -221,7 +221,6 @@ elif page == "history":
 
         for item in filtered_history:
             with st.expander(f"📄 {item['file_name']} (Created: {item['created_at'][:10]})"):
-
                 col_view, col_edit = st.columns(2)
 
                 with col_view:
@@ -236,7 +235,7 @@ elif page == "history":
                         "Edit/Copy text:",
                         value=combined_text,
                         height=250,
-                        key=f"edit_{item['created_at']}"
+                        key=f"edit_{item['created_at']}",
                     )
 
                     # Re-generate exports from history
@@ -246,14 +245,14 @@ elif page == "history":
                                 item["annotated_image"],
                                 texts=item.get("texts"),
                                 image_width=item.get("image_width"),
-                                image_height=item.get("image_height")
+                                image_height=item.get("image_height"),
                             )
                             st.download_button(
                                 "📄 PDF",
                                 data=pdf_bytes,
                                 file_name=f"{item['file_name']}_extracted.pdf",
                                 mime="application/pdf",
-                                key=f"pdf_{item['created_at']}"
+                                key=f"pdf_{item['created_at']}",
                             )
                         except Exception:
                             pass

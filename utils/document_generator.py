@@ -4,12 +4,11 @@ Generates PDF and DOCX files from OCR extraction results.
 Texts are placed spatially according to their bounding box positions.
 """
 
-import io
 import base64
+import io
 
-from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
-
+from reportlab.pdfgen import canvas
 
 # ============================================================
 # IMAGE-BASED RECONSTRUCTION (pixel-perfect)
@@ -114,9 +113,7 @@ def _sort_texts_top_to_bottom(texts: list[dict]) -> list[dict]:
 # ============================================================
 
 
-def generate_pdf_with_layout(
-    texts: list[dict], image_width: int, image_height: int
-) -> bytes:
+def generate_pdf_with_layout(texts: list[dict], image_width: int, image_height: int) -> bytes:
     """
     Generate a clean PDF with text placed proportionally
     to its original position in the source image.

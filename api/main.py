@@ -1,12 +1,13 @@
-import numpy as np
-import cv2
 import io
 import logging
 import time
 
-from fastapi import FastAPI, UploadFile, File, Request
+import cv2
+import numpy as np
+from fastapi import FastAPI, File, Request, UploadFile
 from fastapi.responses import JSONResponse
 from PIL import Image
+
 from src.pipeline import process_image
 
 # =========================
@@ -34,9 +35,7 @@ async def log_requests(request: Request, call_next):
     logger.info(f"→ {request.method} {request.url.path}")
     response = await call_next(request)
     duration = round((time.time() - start) * 1000, 2)
-    logger.info(
-        f"← {request.method} {request.url.path} [{response.status_code}] {duration}ms"
-    )
+    logger.info(f"← {request.method} {request.url.path} [{response.status_code}] {duration}ms")
     return response
 
 
@@ -54,7 +53,6 @@ async def health():
 # =========================
 @app.post("/extract")
 async def extract(file: UploadFile = File(...)):
-
     logger.info(f"Received file: '{file.filename}' | content_type: {file.content_type}")
 
     # ------------------------

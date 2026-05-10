@@ -1,5 +1,6 @@
-import numpy as np
 from unittest.mock import Mock, patch
+
+import numpy as np
 
 
 def test_ocr_engine_init():

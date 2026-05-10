@@ -1,6 +1,5 @@
-import sqlite3
 import json
-
+import sqlite3
 from datetime import datetime
 
 DB_PATH = "ocr_app.db"

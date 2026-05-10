@@ -2,9 +2,7 @@ import numpy as np
 
 
 def crop_regions(
-    image: np.ndarray,
-    boxes: list[tuple[int, int, int, int]],
-    padding: int = 4
+    image: np.ndarray, boxes: list[tuple[int, int, int, int]], padding: int = 4
 ) -> list[np.ndarray]:
     """
     Crop regions from an image using bounding boxes.
@@ -20,7 +18,7 @@ def crop_regions(
     h, w = image.shape[:2]
     crops = []
 
-    for (x1, y1, x2, y2) in boxes:
+    for x1, y1, x2, y2 in boxes:
         # Apply padding while staying within image boundaries
         x1p = max(0, x1 - padding)
         y1p = max(0, y1 - padding)

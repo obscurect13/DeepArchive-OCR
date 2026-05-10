@@ -1,8 +1,9 @@
-import cv2
 import base64
 
-from src.detector import detect_text_regions
+import cv2
+
 from src.cropper import crop_regions
+from src.detector import detect_text_regions
 from src.ocr_engine import OCREngine
 
 ocr = OCREngine()
@@ -20,9 +21,7 @@ def preprocess_for_ocr(crop):
     # 3. Redimensionnement si le crop est trop petit (optionnel mais recommandé)
     height, width = binary.shape
     if height < 30:
-        binary = cv2.resize(
-            binary, (None, None), fx=2, fy=2, interpolation=cv2.INTER_CUBIC
-        )
+        binary = cv2.resize(binary, (None, None), fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
 
     return binary
 

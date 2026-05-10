@@ -1,5 +1,6 @@
-import numpy as np
 from unittest.mock import patch
+
+import numpy as np
 
 
 def test_preprocess_for_ocr():
