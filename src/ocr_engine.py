@@ -8,7 +8,7 @@ class OCREngine:
     The reader is initialized once and reused across all calls.
     """
 
-    def __init__(self, languages: list[str] = None, gpu: bool = False):
+    def __init__(self, languages: list[str] | None = None, gpu: bool = False):
         self.languages = languages or ["en", "fr"]
         self.reader = easyocr.Reader(self.languages, gpu=gpu)
 
