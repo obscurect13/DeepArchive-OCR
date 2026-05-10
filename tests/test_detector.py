@@ -4,18 +4,19 @@ import numpy as np
 from unittest.mock import MagicMock, patch
 
 
-@patch('src.detector._reader.detect')
+@patch("src.detector._reader.detect")
 def test_detect_text_regions_success(mock_detect):
-    from src.detector import detect_text_regions   
-    
+    from src.detector import detect_text_regions
+
     # Simulate EasyOCR returning two horizontal boxes: [x1, x2, y1, y2]
     mock_detect.return_value = ([[10, 50, 10, 30], [60, 90, 40, 60]], [])
-    
+
     image = np.zeros((100, 100, 3), dtype=np.uint8)
     boxes = detect_text_regions(image)
-    
+
     assert len(boxes) == 2
-    assert boxes[0] == (10, 10, 50, 30) # Converted to (x1, y1, x2, y2)
+    assert boxes[0] == (10, 10, 50, 30)  # Converted to (x1, y1, x2, y2)
+
 
 def test_detect_text_regions_empty():
     """Test text detection with no results."""
@@ -59,15 +60,15 @@ def test_detect_text_regions_filters_degenerate():
         assert boxes[0] == (10, 20, 30, 40)
 
 
-@patch('src.detector._reader.detect')
+@patch("src.detector._reader.detect")
 def test_detect_text_regions_box_format(mock_detect):
-    from src.detector import detect_text_regions 
-       
+    from src.detector import detect_text_regions
+
     # Mock EasyOCR returning one valid horizontal box
     mock_detect.return_value = ([[10, 50, 20, 60]], [])
-    
+
     image = np.zeros((100, 100, 3), dtype=np.uint8)
     boxes = detect_text_regions(image)
-    
+
     assert len(boxes) == 1
     assert boxes[0] == (10, 20, 50, 60)
