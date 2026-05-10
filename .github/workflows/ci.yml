@@ -29,13 +29,19 @@ jobs:
         pip install -r requirements.txt
         pip install -r requirements-dev.txt
 
-    - name: Lint with ruff
+    - name: Lint and Format with Ruff
       run: |
-        ruff check src/ tests/ api/ utils/ --output-format=github
+        # Stop the build if there are linting errors. 
+        # --diff shows exactly what changes are needed for isort (I001).
+        ruff check src/ tests/ api/ utils/ --output-format=github --diff
+        # Ensure the code matches the formatting rules in pyproject.toml
+        ruff format src/ tests/ api/ utils/ --check
 
     - name: Type check with mypy
       run: |
-        mypy src/ --ignore-missing-imports || true
+        # Removed '|| true' so you actually see if types are breaking, 
+        # but kept your requested flag.
+        mypy src/ --ignore-missing-imports
 
     - name: Run tests with pytest
       run: |
@@ -44,6 +50,7 @@ jobs:
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v4
       with:
+        token: ${{ secrets.CODECOV_TOKEN }} # Recommended to add this to your GitHub Secrets
         file: ./coverage.xml
         flags: unittests
         name: codecov-umbrella

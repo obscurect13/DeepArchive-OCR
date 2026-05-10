@@ -24,7 +24,7 @@ select = [
     "E",   # pycodestyle errors
     "W",   # pycodestyle warnings
     "F",   # pyflakes
-    "I",   # isort
+    "I",   # isort (import sorting)
     "B",   # flake8-bugbear
     "C4",  # flake8-comprehensions
     "UP",  # pyupgrade
@@ -34,6 +34,10 @@ ignore = [
     "B008",  # do not perform function calls in argument defaults
 ]
 
+[tool.ruff.lint.isort]
+# Explicitly tell Ruff these are local project folders to fix I001 errors
+known-first-party = ["src", "api", "utils", "tests"]
+
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
 
@@ -41,4 +45,5 @@ ignore = [
 quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
+line-ending = "auto"
 line-ending = "auto"
