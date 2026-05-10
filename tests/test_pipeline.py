@@ -1,7 +1,9 @@
 from unittest.mock import patch
 
 import numpy as np
+
 from src.pipeline import draw_boxes, process_image
+
 
 def test_preprocess_for_ocr():
     """Test image preprocessing for OCR."""
@@ -35,10 +37,10 @@ def test_preprocess_for_ocr_small_image():
 def test_draw_boxes():
     image = np.zeros((100, 100, 3), dtype=np.uint8)
     # Manually provide a box so the function has something to draw
-    boxes = [(10, 10, 50, 50)] 
-    
+    boxes = [(10, 10, 50, 50)]
+
     result = draw_boxes(image.copy(), boxes)
-    
+
     # Now this will pass because the image was actually modified
     assert not np.array_equal(image, result)
 
@@ -63,7 +65,7 @@ def test_encode_image_to_base64():
 
 def test_process_image_integration():
     """Test full image processing pipeline with mocked components."""
-    
+
     # Create test image
     image = np.zeros((100, 100, 3), dtype=np.uint8)
     image[:] = [255, 255, 255]

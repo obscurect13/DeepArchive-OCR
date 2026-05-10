@@ -10,10 +10,9 @@ def detect_text_regions(image: np.ndarray) -> list[tuple[int, int, int, int]]:
 
     if results and results[0]:
         for bbox in results[0]:
-
             # Format polygon EasyOCR:
             # [[x1,y1],[x2,y2],[x3,y3],[x4,y4]]
-            if isinstance(bbox[0], (list, tuple)):
+            if isinstance(bbox[0], list | tuple):
                 xs = [point[0] for point in bbox]
                 ys = [point[1] for point in bbox]
 

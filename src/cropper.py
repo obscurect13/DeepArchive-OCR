@@ -1,7 +1,7 @@
 def crop_regions(image, boxes, padding=4):
     h, w = image.shape[:2]
     crops = []
-    
+
     pad_offset = padding // 2
 
     for box in boxes:
