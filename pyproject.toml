@@ -10,6 +10,10 @@ addopts = [
     "--cov=src",
     "--cov-report=term-missing",
 ]
+filterwarnings = [
+    "ignore::DeprecationWarning:easyocr.*:",
+    "ignore::DeprecationWarning:torch.ao.quantization.*:"
+]
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "integration: marks tests as integration tests",

@@ -44,6 +44,8 @@ jobs:
         mypy src/ --ignore-missing-imports
 
     - name: Run tests with pytest
+      env:
+        KMP_DUPLICATE_LIB_OK: "TRUE"
       run: |
         pytest tests/ -v --cov=src --cov-report=xml --cov-report=term
 

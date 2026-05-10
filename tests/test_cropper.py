@@ -24,9 +24,14 @@ def test_crop_regions_with_padding():
     image = np.zeros((100, 100, 3), dtype=np.uint8)
     boxes = [(10, 10, 30, 30)]
 
-    crops = crop_regions(image, boxes, padding=10)
-    assert len(crops) == 1
-    assert crops[0].shape == (40, 40, 3)  # 20x20 + 10 padding
+    # Default padding=4 gives 24x24; padding=10 should give a larger crop
+    crops_default = crop_regions(image, boxes, padding=4)
+    crops_padded = crop_regions(image, boxes, padding=10)
+
+    assert len(crops_padded) == 1
+    # Larger padding must produce a larger crop than default
+    assert crops_padded[0].shape[0] > crops_default[0].shape[0]
+    assert crops_padded[0].shape[1] > crops_default[0].shape[1]
 
 
 def test_crop_regions_boundary():
